@@ -104,7 +104,7 @@ def getCluster() { return; }
 def Pg() { return; }
 
 """
-  @api {put} /cluster/${uuid}/pg/${pg_id}/scrub Scrub Pg
+  @api {post} /cluster/${uuid}/pg/${pg_id}/scrub Scrub Pg
   @apiName scrubPg
   @apiVersion 0.1.0
   @apiGroup Pg
@@ -1246,7 +1246,7 @@ def Osd(){return;}
 def CreateOsd(){return;}
 
 """
-  @api {post} /cluster/${uuid}/osd/${osd_id} Delete OSD
+  @api {delete} /cluster/${uuid}/osd/${osd_id} Delete OSD
   @apiName DeleteOsd
   @apiVersion 0.1.0
   @apiGroup OSD
@@ -1677,7 +1677,7 @@ def deleteRbdMeta(){return;}
 def getClusterConfig(){return;}
 
 """
-  @api {put} /cluster/${uuid}/config/${key} Update a Configuration Option
+  @api {post} /cluster/${uuid}/config/${key} Update a Configuration Option
   @apiName updateClusterConfig
   @apiVersion 0.1.0
   @apiGroup Config
