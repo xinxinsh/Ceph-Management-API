@@ -77,6 +77,103 @@ def CreateCluster() { return; }
 def getCluster() { return; }
 
 """
+  @api {post} /cluster/${uuid}/pg List PGs
+  @apiName listPg
+  @apiVersion 0.1.0
+  @apiGroup Pg
+  @apiPermission none
+ 
+  @apiParam {String} uuid UUID of Cluster.
+ 
+  @apiSuccess {String}   id             PG ID.
+  @apiSuccess {String}   state          PG State.
+ 
+  @apiSuccessExample Response:
+      HTTP/1.1 200 OK
+      [
+        {
+          "pgid": "7.e",
+          "state": "active+clean"
+        },
+        {
+          "pgid": "7.f",
+          "state": "active+clean"
+        }
+      ]
+"""
+def Pg() { return; }
+
+"""
+  @api {put} /cluster/${uuid}/pg/${pg_id}/scrub Scrub Pg
+  @apiName scrubPg
+  @apiVersion 0.1.0
+  @apiGroup Pg
+  @apiPermission none
+ 
+  @apiParam {String} uuid             UUID of Cluster.
+  @apiParam {String} pgid             PG ID.
+ 
+  @apiSuccess {String}   id             PG ID.
+  @apiSuccess {String}   state          PG State.
+ 
+  @apiSuccessExample Response:
+      HTTP/1.1 200 OK
+      {
+        "pgid": "7.f",
+        "state": "active+scrubbing"
+      }
+"""
+def scrubPg() { return; }
+
+"""
+  @api {post} /cluster/${uuid}/pg/${pg_id}/deepscrub Deep Scrub Pg
+  @apiName deepscrubPg
+  @apiVersion 0.1.0
+  @apiGroup Pg
+  @apiPermission none
+ 
+  @apiParam {String} uuid             UUID of Cluster.
+  @apiParam {String} pgid             PG ID.
+ 
+  @apiSuccess {String}   id             PG ID.
+  @apiSuccess {String}   state          PG State.
+ 
+  @apiSuccessExample Response:
+      HTTP/1.1 200 OK
+      {
+        "pgid": "7.f",
+        "state": "active+deepscrubbing"
+      }
+"""
+def deppscrubPg() { return; }
+
+"""
+  @api {post} /cluster/${uuid}/pg/${pg_id}/repair Repair Pg
+  @apiName repairPg
+  @apiVersion 0.1.0
+  @apiGroup Pg
+  @apiPermission none
+ 
+  @apiParam {String} uuid             UUID of Cluster.
+  @apiParam {String} pgid             PG ID.
+ 
+  @apiSuccess {String}   id             PG ID.
+  @apiSuccess {String}   state          PG State.
+ 
+  @apiSuccessExample Response:
+      HTTP/1.1 200 OK
+      {
+        "pgid": "7.f",
+        "state": "active+repair"
+      }
+"""
+def repairPg() { return; }
+
+"""
+  @api {get} /cluster/${uuid}/crush_map Get Crushmap 
+  @apiName getCrushMap
+  @apiVersion 0.1.0
+  @apiGroup Crush
   @api {get} /cluster/${uuid}/crush_map Get Crushmap 
   @apiName getCrushMap
   @apiVersion 0.1.0
