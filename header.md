@@ -1,25 +1,12 @@
-# Example text from header.md
 
-This text is from file "header.md".
+This Doc is for Ceph Management API, include the following sections:
 
-## <span id="api-example-for-a-submenu-entry">HowTo include</span>
+  1.  Cluster Operations
+  2.  Configure Operations
+  3.  Crush Operations
+  4.  Monitor Operations
+  5.  OSD Operations
+  6.  PG Operations
+  7.  RBD Operations
+  8.  Pool Operations
 
-In your projects "package.json" you can set "apidoc.header" with a title and a filename to include this file into your documentation.
-
-This example attempts to integrate "header.md" and "footer.md".
-
-    {
-      "name": "Ceph Management APIs",
-      "version": "0.1.0",
-      "description": "Ceph API project.",
-      "apidoc": {
-        "header": {
-          "title": "My own header title",
-          "filename": "header.md"
-        },
-        "footer": {
-          "title": "My own footer title",
-          "filename": "footer.md"
-        }
-      }
-    }

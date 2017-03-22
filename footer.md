@@ -1,7 +1,3 @@
-# Example text from footer.md
+Ceph Management API Doc
 
-This text is from file "footer.md".
-
-## HowTo include
-
-Watch header.md for further information.
+CopyWrite by Xinxin Shu <shuxinxin@chinac.com>
