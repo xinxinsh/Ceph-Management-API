@@ -77,7 +77,7 @@ def CreateCluster() { return; }
 def getCluster() { return; }
 
 """
-  @api {post} /cluster/${uuid}/pg List PGs
+  @api {get} /cluster/${uuid}/pg List PGs
   @apiName listPg
   @apiVersion 0.1.0
   @apiGroup Pg
@@ -85,49 +85,103 @@ def getCluster() { return; }
  
   @apiParam {String} uuid UUID of Cluster.
  
-  @apiSuccess {String}   id             PG ID.
+  @apiSuccess {String}   name           PG ID.
   @apiSuccess {String}   state          PG State.
+  @apiSuccess {String}   up_primary     PG Up Primary.
+  @apiSuccess {String}   acting_primary PG Acting Primary.
+  @apiSuccess {String}   up             PG Up Set.
+  @apiSuccess {String}   acting         PG Acting Set.
  
   @apiSuccessExample Response:
       HTTP/1.1 200 OK
       [
         {
-          "pgid": "7.e",
-          "state": "active+clean"
-        },
+          "name": "5.12a", 
+          "state": "active+clean", 
+          "up_primary": 2, 
+          "acting_primary": 2, 
+          "up": [
+            2, 
+            5
+          ], 
+          "acting": [
+            2, 
+            5
+          ]
+        }, 
         {
-          "pgid": "7.f",
-          "state": "active+clean"
-        }
+          "name": "4.12b", 
+          "state": "active+clean", 
+          "up_primary": 4, 
+          "acting_primary": 4, 
+          "up": [
+            4, 
+            1
+          ], 
+          "acting": [
+            4, 
+            1
+          ]
+        }, 
+        {
+          "name": "5.12b", 
+          "state": "active+clean", 
+          "up_primary": 5, 
+          "acting_primary": 5, 
+          "up": [
+            5, 
+            2
+          ], 
+          "acting": [
+            5, 
+            2
+          ]
+        }, 
       ]
 """
 def Pg() { return; }
 
 """
-  @api {post} /cluster/${uuid}/pg/${pg_id}/scrub Scrub Pg
-  @apiName scrubPg
+  @api {get} /cluster/${uuid}/pg/${pgid} Get PG 
+  @apiName getPg
   @apiVersion 0.1.0
   @apiGroup Pg
   @apiPermission none
- 
-  @apiParam {String} uuid             UUID of Cluster.
-  @apiParam {String} pgid             PG ID.
- 
-  @apiSuccess {String}   id             PG ID.
+
+  @apiParam {String} uuid UUID of Cluster.
+  @apiParam {String} pgid PG ID.
+
+  @apiSuccess {String}   name           PG ID.
   @apiSuccess {String}   state          PG State.
- 
+  @apiSuccess {String}   up_primary     PG Up Primary.
+  @apiSuccess {String}   acting_primary PG Acting Primary.
+  @apiSuccess {String}   up             PG Up Set.
+  @apiSuccess {String}   acting         PG Acting Set.
+
   @apiSuccessExample Response:
       HTTP/1.1 200 OK
-      {
-        "pgid": "7.f",
-        "state": "active+scrubbing"
-      }
+      [
+        {
+          "name": "5.12a",
+          "state": "active+clean",
+          "up_primary": 2,
+          "acting_primary": 2,
+          "up": [
+            2,
+            5
+          ],
+          "acting": [
+            2,
+            5
+          ]
+        }
+      ]
 """
-def scrubPg() { return; }
+def getPg() {return;}
 
 """
-  @api {post} /cluster/${uuid}/pg/${pg_id}/deepscrub Deep Scrub Pg
-  @apiName deepscrubPg
+  @api {post} /cluster/${uuid}/pg/${pg_id}/command/${command} Issue command to pg
+  @apiName OpPg
   @apiVersion 0.1.0
   @apiGroup Pg
   @apiPermission none
@@ -135,39 +189,16 @@ def scrubPg() { return; }
   @apiParam {String} uuid             UUID of Cluster.
   @apiParam {String} pgid             PG ID.
  
-  @apiSuccess {String}   id             PG ID.
-  @apiSuccess {String}   state          PG State.
+  @apiSuccess {String}   id             Request ID.
  
   @apiSuccessExample Response:
       HTTP/1.1 200 OK
       {
-        "pgid": "7.f",
-        "state": "active+deepscrubbing"
+        "request_id": "fa9919ca-7b8f-4d22-9708-96164437b31c"
       }
 """
-def deppscrubPg() { return; }
+def OpPg() { return; }
 
-"""
-  @api {post} /cluster/${uuid}/pg/${pg_id}/repair Repair Pg
-  @apiName repairPg
-  @apiVersion 0.1.0
-  @apiGroup Pg
-  @apiPermission none
- 
-  @apiParam {String} uuid             UUID of Cluster.
-  @apiParam {String} pgid             PG ID.
- 
-  @apiSuccess {String}   id             PG ID.
-  @apiSuccess {String}   state          PG State.
- 
-  @apiSuccessExample Response:
-      HTTP/1.1 200 OK
-      {
-        "pgid": "7.f",
-        "state": "active+repair"
-      }
-"""
-def repairPg() { return; }
 
 """
   @api {get} /cluster/${uuid}/crush_map Get Crushmap 
@@ -873,6 +904,7 @@ def CreatePool(){return;}
   @apiSuccessExample {json} SuccessReponse:
       HTTP/1.1 200 OK
       {
+        "request_id": "068e21c7-08af-4384-9b60-65840e291ee7"
       }
 """
 def DeletePool(){return;}
@@ -1341,6 +1373,69 @@ def getOsd(){return;}
 def OsdCommand(){return;}
 
 """
+  @api {get} /cluster/${uuid}/osd/${osd_id}/df Get Df of OSD
+  @apiName Osddf
+  @apiVersion 0.1.0
+  @apiGroup OSD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {Number} id ID of OSD
+
+  @apiSuccess {String}    Name    OSD Name
+  @apiSuccess {Number}    utilization OSD Utilization
+  @apiSuccess {Number}    kb          OSD Kb
+  @apiSuccess {Number}    kb_avail    OSD Available Size
+  @apiSuccess {Number}    kb_used     OSD Used Size
+  @apiSuccess {Number}    var         OSD Available Size
+  @apiSuccess {Number}    crush_weigt OSD Crush Weight
+  @apiSuccess {Number}    reweight    OSD reweight
+  @apiSuccess {Number}    pgs         OSD PG Count
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      {
+        "name": "osd.5", 
+        "utilization": 0.262538, 
+        "kb": 15717356, 
+        "kb_avail": 15676092, 
+        "kb_used": 41264, 
+        "var": 0.939028, 
+        "crush_weight": 0.014587, 
+        "reweight": 1.0, 
+        "pgs": 300
+      }
+"""
+def Osddf(){return;}
+
+"""
+  @api {get} /cluster/${uuid}/osd/${osd_id}/perf Get Perf of OSD
+  @apiName Osdperf
+  @apiVersion 0.1.0
+  @apiGroup OSD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {Number} id ID of OSD
+
+  @apiSuccess {Number}    id                OSD ID
+  @apiSuccess {Number}    apply_latency_ms  OSD apply latency
+  @apiSuccess {Number}    commit_latency_ms OSD commit latency
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+  {
+    "id": 5, 
+    "perf_stats": {
+        "apply_latency_ms": 8, 
+        "commit_latency_ms": 7
+    }
+  }  
+"""
+def Osdperf(){return;}
+
+
+"""
   @api {get} /cluster/${uuid}/osd/${osd_id}/command Get Specific support command of specific OSD
   @apiName getOsdCommand
   @apiVersion 0.1.0
@@ -1389,7 +1484,7 @@ def getOsdCommand(){return;}
 def validateOsdCommand(){return;}
 
 """
-  @api {get} /cluster/${uuid}/osd_status Manage flags in the OsdMap
+  @api {get} /cluster/${uuid}/osd_config Manage flags in the OsdMap
   @apiName OsdFlag
   @apiVersion 0.1.0
   @apiGroup OSD
@@ -1444,6 +1539,48 @@ def OsdFlag(){return;}
 def Rbd(){return;}
 
 """
+  @api {post} /cluster/${uuid}/pool/${pool_id}/rbd Create Rbd
+  @apiName CreateRbd
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+
+  @apiSuccess {String}  request_id     Request ID
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      [
+        "request_id": "28697a80-751f-4e83-a1e0-15b3a03297a7"
+      ]
+"""
+def CreateRbd(){return;}
+
+
+"""
+  @api {delete} /cluster/${uuid}/pool/${pool_id}/rbd/{rbd_name} Delete Rbd
+  @apiName DeleteRbd
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+  @apiParam {String} rbd_name RBD Name
+
+  @apiSuccess {String}   request_id   Request ID 
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      [
+        "request_id": "28697a80-751f-4e83-a1e0-15b3a03297a7"
+      ]
+"""
+def DeleteRbd(){return;}
+
+"""
   @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name} Get Rbd
   @apiName getRbd
   @apiVersion 0.1.0
@@ -1480,7 +1617,7 @@ def getRbd(){return;}
 
 """
   @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap List Snapshot 
-  @apiName RbdSnap
+  @apiName ListRbdSnap
   @apiVersion 0.1.0
   @apiGroup RBD
   @apiPermission admin
@@ -1490,8 +1627,9 @@ def getRbd(){return;}
   @apiParam {String} rbd_name Rbd Name
 
   @apiSuccess {String}    name        Snapshot Name
-  @apiSuccess {Number}    snapid          Snapshot ID
+  @apiSuccess {Number}    snapid      Snapshot ID
   @apiSuccess {String}    size        Snapshot Size
+  @apiSuccess {Boolean}   protected   Protect Flag
 
   @apiSuccessExample {json} SuccessReponse:
       HTTP/1.1 200 OK
@@ -1500,11 +1638,104 @@ def getRbd(){return;}
           name: snap
           snapid: 4
           size: 10240 kB
+          protected: false
         },
       ]
 """
-def getRbd(){return;}
+def listRbdSnap(){return;}
 
+"""
+  @api {post} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap Create Snapshot
+  @apiName CreateRbdSnap
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+  @apiParam {String} rbd_name Rbd Name
+
+  @apiSuccess {String}    request_id    Request ID
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      {
+        "request_id": "4b830621-0027-4e34-9aa3-118fc7d8604d"
+      }
+"""
+def createRbdSnap(){return;}
+
+"""
+  @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap/${snap_name} Get Snapshot
+  @apiName GetRbdSnap
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+  @apiParam {String} rbd_name Rbd Name
+  @apiParam {String} snap_name Snap Name
+
+  @apiSuccess {String}    name        Snapshot Name
+  @apiSuccess {Number}    snapid      Snapshot ID
+  @apiSuccess {String}    size        Snapshot Size
+  @apiSuccess {Boolean}   protected   Protect Flag
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      {
+        name: snap
+        snapid: 4
+        size: 10240 kB
+        protected: false
+      }
+"""
+def getRbdSnap(){return;}
+
+"""
+  @api {delete} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap/${snap_name} Delete Snapshot
+  @apiName DeleteRbdSnap
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+  @apiParam {String} rbd_name Rbd Name
+  @apiParam {String} snap_name Snap Name
+
+  @apiSuccess {String}    request_id    Request ID
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      {
+        "request_id": "4b830621-0027-4e34-9aa3-118fc7d8604d"
+      }
+"""
+def deleteRbdSnap(){return;}
+
+"""
+  @api {patch} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap/${snap_name} Update Snapshot
+  @apiName UpdateRbdSnap
+  @apiVersion 0.1.0
+  @apiGroup RBD
+  @apiPermission admin
+
+  @apiParam {String} uuid UUID of Cluster
+  @apiParam {String} pool_id Pool ID
+  @apiParam {String} rbd_name Rbd Name
+  @apiParam {String} snap_name Snap Name
+
+  @apiSuccess {String}    request_id    Request ID
+
+  @apiSuccessExample {json} SuccessReponse:
+      HTTP/1.1 200 OK
+      {
+        "request_id": "4b830621-0027-4e34-9aa3-118fc7d8604d"
+      }
+"""
+def updateRbdSnap(){return;}
 
 """
   @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/lock List Locks
@@ -1526,7 +1757,7 @@ def getRbd(){return;}
       {
         lockers: [(u'client.1084750', u'test-lock', u'10.21.1.12:0/3412829308')]
         exclusive: True
-        tag: ''
+        tag: 'internal'
       }
 """
 def getRbdLock(){return;}
@@ -1554,7 +1785,7 @@ def getRbdLock(){return;}
 def deleteRbdLock(){return;}
 
 """
-  @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap/${snap_name}/ Get Children of Snapshot
+  @api {get} /cluster/${uuid}/pool/${pool_id}/rbd/${rbd_name}/snap/${snap_name}/children Get Children of Snapshot
   @apiName RbdSnapChildren
   @apiVersion 0.1.0
   @apiGroup RBD
@@ -1565,16 +1796,15 @@ def deleteRbdLock(){return;}
   @apiParam {String} rbd_name Rbd Name
   @apiParam {String} snap_name Snap Name
 
-  @apiSuccess {String}    pool         Pool Name
   @apiSuccess {String}    name         Rbd Name
 
   @apiSuccessExample {json} SuccessReponse:
       HTTP/1.1 200 OK
       [
-        {
-          pool: 'rbd'
-          name: 'clone'
-        },
+        [
+          'pool':'images',
+          'name': 'clone'
+        ],
       ]
 """
 def getRbdSnapChildren(){return;}
@@ -1686,14 +1916,12 @@ def getClusterConfig(){return;}
   @apiParam {String} uuid UUID of Cluster
   @apiParam {String} key Config Key
 
-  @apiSuccess {String}    value    Config Value
-  @apiSuccess {String}    key      Config Key
+  @apiSuccess {String}    request_id      Request ID
 
   @apiSuccessExample {json} SuccessReponse:
       HTTP/1.1 200 OK
       {
-        "value": "10",
-        "key": "mds_bal_interval"
+        "request_id": "963d3732-e789-46b7-87ac-54591344aab6"
       }
 """
 def updateClusterConfig(){return;}

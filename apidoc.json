@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "API for Ceph Management",
   "title": "Ceph Management API Doc",
-  "url" : "https://localhost/api/v1",
-  "sampleUrl": "https://localhost/api/v1",
+  "url" : "https://10.21.1.97/api/v2",
+  "sampleUrl": "https://localhost/api/v2",
   "header": {
     "title": "Ceph Management API",
     "filename": "header.md"
